@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { AutoPlateModule } from './auto-plate/auto-plate.module';
+import { InfrastructureModule } from './infrastructure/infrastructure.module';
 
 @Module({
   imports: [
@@ -12,7 +14,11 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || 'pass123',
       database: process.env.DB_NAME || 'sprawdzauto',
+      autoLoadEntities: true,
+      synchronize: true,
     }),
+    AutoPlateModule,
+    InfrastructureModule,
   ],
 })
 export class AppModule {}
