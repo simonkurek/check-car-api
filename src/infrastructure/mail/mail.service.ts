@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BaseMailStrategy } from './strategies/base-mail.strategy';
 import { BaseMail } from './entities/base-mail.entity';
+import { EmailContent } from './entities/email-content';
 
 @Injectable()
 export class MailService {
@@ -10,7 +11,7 @@ export class MailService {
     return await this.mailStrategy.getNewAddress();
   }
 
-  async checkMessages(email: BaseMail) {
+  async checkMessages(email: BaseMail): Promise<EmailContent[]> {
     return await this.mailStrategy.checkMessages(email);
   }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BaseMailStrategy } from './base-mail.strategy';
 import { TenMinuteMailEntity } from '../entities/10minutemail.entity';
+import { EmailContent } from '../entities/email-content';
 
 @Injectable()
 export class TenMinuteMailStrategy extends BaseMailStrategy {
@@ -13,15 +14,18 @@ export class TenMinuteMailStrategy extends BaseMailStrategy {
     const newEmailAddress = await emailAddressResponse.json();
     return new TenMinuteMailEntity(newEmailAddress, cookies);
   }
-  async checkMessages(email: TenMinuteMailEntity) {
+  async checkMessages(email: TenMinuteMailEntity): Promise<EmailContent[]> {
     // include cookies in request
-    console.log('email.getCookie():', email.getCookie());
     const response = await fetch('https://10minutemail.com/messages/', {
       headers: {
         cookie: email.getCookie(),
       },
     });
-    const messages = await response.json();
+    const messages = (await response.json()) as EmailContent[];
+    // const messages: EmailContent[] = [];
+    // messagesData.forEach((message: any) => {
+    //   messages.push(EmailContent.fromJson(message));
+    // });
     return messages;
   }
 }
